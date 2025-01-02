@@ -28,12 +28,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.favorites.FavoritesScreen
-import com.example.notifications.NotificationsScreen
 import com.example.productdetail.ProductDetailScreen
-import com.example.profile.ProfileScreen
-import com.example.ui.navigation.NavigationItem
+import com.sercan.ecommerce.profile.ProfileScreen
 import com.sercan.ecommerce.common.navigation.DeepLinks
 import com.sercan.ecommerce.home.HomeScreen
+import com.sercan.ecommerce.notifications.NotificationsScreen
+import com.sercan.ecommerce.ui.navigation.NavigationItem
+import com.sercan.ecommerce.ui.theme.EcommerceTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
+            EcommerceTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

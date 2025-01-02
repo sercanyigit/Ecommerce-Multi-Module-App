@@ -23,8 +23,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.home.HomeViewModel
-import com.example.ui.components.ProductCard
+import com.sercan.ecommerce.ui.components.ProductCard
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
 
@@ -52,13 +51,13 @@ fun HomeScreen(
     onProductClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     val banners = listOf(
         Banner(1, "İndirim", "İlk alışverişinize özel", "20% Discount"),
         Banner(2, "Yeni Sezon", "Yaz koleksiyonu", "New Collection"),
         Banner(3, "Fırsat", "Seçili ürünlerde", "30% Off")
     )
-    
+
     val categories = listOf(
         Category(1, "All"),
         Category(2, "Running"),
@@ -66,9 +65,9 @@ fun HomeScreen(
         Category(4, "Formal"),
         Category(5, "Casual")
     )
-    
+
     val pagerState = rememberPagerState(pageCount = { banners.size })
-    
+
     // Otomatik geçiş için LaunchedEffect
     LaunchedEffect(Unit) {
         while (true) {
@@ -77,11 +76,16 @@ fun HomeScreen(
             pagerState.animateScrollToPage(nextPage)
         }
     }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Nike Store") }
+                title = {
+                    Text(
+                        text = "Nike Store",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
             )
         }
     ) { paddingValues ->
@@ -100,10 +104,10 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxSize()
                 ) { page ->
                     val pageOffset = (
-                        (pagerState.currentPage - page) + pagerState
-                            .currentPageOffsetFraction
-                    ).absoluteValue
-                    
+                            (pagerState.currentPage - page) + pagerState
+                                .currentPageOffsetFraction
+                            ).absoluteValue
+
                     Card(
                         modifier = Modifier
                             .graphicsLayer {
@@ -114,13 +118,13 @@ fun HomeScreen(
                                 )
                                 scaleX = scale
                                 scaleY = scale
-                                
+
                                 alpha = lerp(
                                     start = 0.5f,
                                     stop = 1f,
                                     fraction = 1f - pageOffset.coerceIn(0f, 1f)
                                 )
-                                
+
                                 rotationY = lerp(
                                     start = 30f,
                                     stop = 0f,
@@ -152,7 +156,6 @@ fun HomeScreen(
                                 Text(
                                     text = banners[page].discount,
                                     style = MaterialTheme.typography.headlineSmall,
-                                    fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                             }
@@ -160,12 +163,15 @@ fun HomeScreen(
                                 onClick = { },
                                 modifier = Modifier.align(Alignment.BottomStart)
                             ) {
-                                Text("Shop now")
+                                Text(
+                                    text = "Shop now",
+                                    style = MaterialTheme.typography.labelLarge
+                                )
                             }
                         }
                     }
                 }
-                
+
                 Row(
                     Modifier
                         .height(50.dp)
@@ -179,9 +185,9 @@ fun HomeScreen(
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
                         }
-                        
+
                         val size = if (pagerState.currentPage == iteration) 10.dp else 8.dp
-                        
+
                         Box(
                             modifier = Modifier
                                 .padding(2.dp)
@@ -198,7 +204,7 @@ fun HomeScreen(
                     }
                 }
             }
-            
+
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -209,11 +215,16 @@ fun HomeScreen(
                     FilterChip(
                         selected = category.name == uiState.selectedCategory,
                         onClick = { viewModel.filterProducts(category.name) },
-                        label = { Text(category.name) }
+                        label = {
+                            Text(
+                                text = category.name,
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
                     )
                 }
             }
-            
+
             AnimatedVisibility(
                 visible = true,
                 enter = fadeIn() + expandVertically(),
@@ -246,4 +257,4 @@ fun HomeScreen(
             }
         }
     }
-} 
+}
