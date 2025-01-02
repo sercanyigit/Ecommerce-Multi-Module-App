@@ -1,4 +1,4 @@
-package com.example.favorites
+package com.sercan.ecommerce.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sercan.ecommerce.favorites.FavoritesViewModel
 import com.sercan.ecommerce.ui.components.ProductCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +34,12 @@ fun FavoritesScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Favoriler") }
+                title = { 
+                    Text(
+                        text = "Favoriler",
+                        style = MaterialTheme.typography.titleLarge
+                    ) 
+                }
             )
         }
     ) { paddingValues ->

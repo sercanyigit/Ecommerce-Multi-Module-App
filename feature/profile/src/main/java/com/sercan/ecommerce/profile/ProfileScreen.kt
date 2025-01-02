@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -17,7 +18,12 @@ fun ProfileScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Profil") }
+                title = { 
+                    Text(
+                        text = "Profil",
+                        style = MaterialTheme.typography.titleLarge
+                    ) 
+                }
             )
         }
     ) { paddingValues ->
@@ -41,7 +47,8 @@ fun ProfileScreen() {
 
             Text(
                 text = "Kullanıcı Adı",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -54,22 +61,42 @@ fun ProfileScreen() {
             Spacer(modifier = Modifier.height(32.dp))
 
             ListItem(
-                headlineContent = { Text("Siparişlerim") },
+                headlineContent = { 
+                    Text(
+                        text = "Siparişlerim",
+                        style = MaterialTheme.typography.titleMedium
+                    ) 
+                },
                 leadingContent = { Icon(Icons.Default.Person, contentDescription = null) }
             )
 
             ListItem(
-                headlineContent = { Text("Adreslerim") },
+                headlineContent = { 
+                    Text(
+                        text = "Adreslerim",
+                        style = MaterialTheme.typography.titleMedium
+                    ) 
+                },
                 leadingContent = { Icon(Icons.Default.Person, contentDescription = null) }
             )
 
             ListItem(
-                headlineContent = { Text("Ödeme Yöntemlerim") },
+                headlineContent = { 
+                    Text(
+                        text = "Ödeme Yöntemlerim",
+                        style = MaterialTheme.typography.titleMedium
+                    ) 
+                },
                 leadingContent = { Icon(Icons.Default.Person, contentDescription = null) }
             )
 
             ListItem(
-                headlineContent = { Text("Ayarlar") },
+                headlineContent = { 
+                    Text(
+                        text = "Ayarlar",
+                        style = MaterialTheme.typography.titleMedium
+                    ) 
+                },
                 leadingContent = { Icon(Icons.Default.Person, contentDescription = null) }
             )
         }
