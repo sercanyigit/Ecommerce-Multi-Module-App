@@ -12,8 +12,25 @@ data class ProductEntity(
     val price: Double,
     val imageUrl: String,
     val description: String,
-    val isFavorite: Boolean
-)
+    val isFavorite: Boolean = false,
+    val category: String = "",
+    val sizes: List<String>? = null,
+    val colors: List<String>? = null
+) {
+    fun toProduct(): Product {
+        return Product(
+            id = id,
+            name = name,
+            price = price,
+            imageUrl = imageUrl,
+            description = description,
+            isFavorite = isFavorite,
+            category = category,
+            sizes = sizes.orEmpty(),
+            colors = colors.orEmpty()
+        )
+    }
+}
 
 fun ProductEntity.toProduct() = Product(
     id = id,
@@ -21,7 +38,10 @@ fun ProductEntity.toProduct() = Product(
     price = price,
     imageUrl = imageUrl,
     description = description,
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
+    category = category,
+    sizes = sizes.orEmpty(),
+    colors = colors.orEmpty()
 )
 
 fun Product.toEntity() = ProductEntity(
@@ -30,5 +50,8 @@ fun Product.toEntity() = ProductEntity(
     price = price,
     imageUrl = imageUrl,
     description = description,
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
+    category = category,
+    sizes = sizes,
+    colors = colors
 ) 

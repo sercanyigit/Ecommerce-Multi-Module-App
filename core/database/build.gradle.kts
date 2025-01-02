@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     
+    // Gson
+    implementation(libs.gson)
+    
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.test.ext)

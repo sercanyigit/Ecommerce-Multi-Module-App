@@ -53,41 +53,40 @@ data class Category(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    onProductClick: (Int) -> Unit
+    onProductClick: (Int) -> Unit,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
     val banners = listOf(
         Banner(
-            1, 
-            "20%", 
-            "Discount", 
-            "on your first purchase",
-            "https://example.com/shoe1.jpg"
+            1,
+            "Yeni Sezon",
+            "Sonbahar koleksiyonu",
+            "%20 İndirim",
+            "https://example.com/banner1.jpg"
         ),
         Banner(
             2,
-            "40%",
-            "Discount",
-            "on your first purchase",
-            "https://example.com/shoe1.jpg"
+            "Kış Fırsatları",
+            "Kış sezonu indirimleri",
+            "%40 İndirim",
+            "https://example.com/banner2.jpg"
         ),
         Banner(
             3,
-            "20%",
-            "Discount",
-            "on your first purchase",
-            "https://example.com/shoe1.jpg"
+            "Özel Teklif",
+            "İlk alışverişinize özel",
+            "%30 İndirim",
+            "https://example.com/banner3.jpg"
         )
     )
 
     val categories = listOf(
-        Category(1, "All", true),
-        Category(2, "Running"),
-        Category(3, "Sneakers"),
-        Category(4, "Formal"),
-        Category(5, "Casual")
+        Category(1, "Tümü", uiState.selectedCategory == "Tümü"),
+        Category(2, "Ayakkabı", uiState.selectedCategory == "Ayakkabı"),
+        Category(3, "Giyim", uiState.selectedCategory == "Giyim"),
+        Category(4, "Aksesuar", uiState.selectedCategory == "Aksesuar")
     )
 
     val pagerState = rememberPagerState(pageCount = { banners.size })
@@ -103,30 +102,18 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = {
-                    AsyncImage(
-                        model = R.drawable.ic_launcher_foreground,
-                        contentDescription = "Nike Logo",
-                        modifier = Modifier.height(24.dp)
+                    Text(
+                        text = "Anasayfa",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = "Menu"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Cart"
-                        )
-                    }
-                }
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
         }
     ) { paddingValues ->
@@ -166,19 +153,13 @@ fun HomeScreen(
                                     stop = 1f,
                                     fraction = 1f - pageOffset.coerceIn(0f, 1f)
                                 )
-
-                                rotationY = lerp(
-                                    start = 30f,
-                                    stop = 0f,
-                                    fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                                )
                             }
                             .fillMaxWidth()
                             .height(160.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     ) {
                         Row(
@@ -194,38 +175,35 @@ fun HomeScreen(
                                 Text(
                                     text = banners[page].title,
                                     style = MaterialTheme.typography.headlineMedium,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                                 Text(
                                     text = banners[page].description,
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                                 Text(
                                     text = banners[page].discount,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    style = MaterialTheme.typography.titleLarge,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Button(
                                     onClick = { },
-                                    shape = RoundedCornerShape(8.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary,
-                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                        containerColor = MaterialTheme.colorScheme.primary
                                     )
                                 ) {
-                                    Text(
-                                        text = "Shop now",
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
+                                    Text("Alışverişe Başla")
                                 }
                             }
                             AsyncImage(
                                 model = banners[page].imageUrl,
-                                contentDescription = "Promo Shoe",
+                                contentDescription = null,
                                 contentScale = ContentScale.Fit,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier
+                                    .size(120.dp)
+                                    .weight(1f)
                             )
                         }
                     }
@@ -235,7 +213,7 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 12.dp)
+                        .padding(bottom = 8.dp)
                         .align(Alignment.BottomCenter)
                 ) {
                     Row(
@@ -245,21 +223,16 @@ fun HomeScreen(
                         repeat(pagerState.pageCount) { iteration ->
                             Box(
                                 modifier = Modifier
-                                    .width(if (pagerState.currentPage == iteration) 20.dp else 6.dp)
-                                    .height(6.dp)
+                                    .width(if (pagerState.currentPage == iteration) 24.dp else 8.dp)
+                                    .height(8.dp)
                                     .clip(CircleShape)
                                     .background(
-                                        if (pagerState.currentPage == iteration) 
+                                        if (pagerState.currentPage == iteration)
                                             MaterialTheme.colorScheme.primary
-                                        else 
-                                            MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.3f)
+                                        else
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
                                     )
-                                    .animateContentSize(
-                                        animationSpec = spring(
-                                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                                            stiffness = Spring.StiffnessLow
-                                        )
-                                    )
+                                    .animateContentSize()
                             )
                         }
                     }
@@ -268,59 +241,42 @@ fun HomeScreen(
 
             // Categories
             LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(categories) { category ->
                     FilterChip(
                         selected = category.isSelected,
                         onClick = { viewModel.filterProducts(category.name) },
-                        label = {
-                            Text(
-                                text = category.name,
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        },
+                        label = { Text(category.name) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Color.Black,
-                            selectedLabelColor = Color.White
-                        ),
-                        shape = RoundedCornerShape(24.dp)
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+                        )
                     )
                 }
             }
 
-            // Products Grid
-            AnimatedVisibility(
-                visible = true,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Products
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxSize()
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(
-                        items = uiState.products,
-                        key = { it.id }
-                    ) { product ->
-                        ProductCard(
-                            product = product,
-                            onProductClick = { onProductClick(it.id) },
-                            onFavoriteClick = { viewModel.toggleFavorite(it) },
-                            modifier = Modifier.animateItemPlacement(
-                                animationSpec = spring(
-                                    dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = Spring.StiffnessLow
-                                )
-                            )
-                        )
-                    }
+                items(
+                    items = uiState.filteredProducts,
+                    key = { it.id }
+                ) { product ->
+                    ProductCard(
+                        product = product,
+                        onProductClick = { onProductClick(product.id) },
+                        onFavoriteClick = { viewModel.toggleFavorite(product) },
+                        modifier = Modifier.animateItemPlacement()
+                    )
                 }
             }
         }

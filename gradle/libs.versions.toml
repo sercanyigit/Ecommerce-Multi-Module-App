@@ -18,6 +18,8 @@ material = "1.11.0"
 coil = "2.5.0"
 room = "2.6.1"
 datastore = "1.0.0"
+gson = "2.10.1"
+accompanist = "0.33.2-alpha"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -63,6 +65,12 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 
 # DataStore
 androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+
+# Gson
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+
+# Accompanist
+accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

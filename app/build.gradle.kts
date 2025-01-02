@@ -78,6 +78,9 @@ dependencies {
     // Navigation
     implementation(libs.navigation.compose)
     
+    // Accompanist
+    implementation(libs.accompanist.systemuicontroller)
+    
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

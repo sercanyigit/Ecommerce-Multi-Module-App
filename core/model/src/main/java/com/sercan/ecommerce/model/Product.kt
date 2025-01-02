@@ -5,7 +5,7 @@ data class Product(
     val name: String,
     val price: Double,
     val imageUrl: String,
-    val description: String = "",
+    val description: String,
     val isFavorite: Boolean = false,
     val category: String = "",
     val sizes: List<String> = emptyList(),
