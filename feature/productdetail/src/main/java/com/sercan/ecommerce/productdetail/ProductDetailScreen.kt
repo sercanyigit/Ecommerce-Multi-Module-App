@@ -37,13 +37,12 @@ fun ProductDetailScreen(
 
     Scaffold(
         topBar = {
-            LargeTopAppBar(
-                title = { 
+            TopAppBar(
+                title = {
                     Text(
                         text = product?.name ?: "",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold
-                    ) 
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -67,6 +66,7 @@ fun ProductDetailScreen(
                             tint = if (uiState.product?.isFavorite == true) Color.Red else LocalContentColor.current
                         )
                     }
+                    Spacer(modifier = Modifier.width(20.dp))
                     BadgedBox(
                         badge = {
                             if (uiState.cartItemCount > 0) {
@@ -89,7 +89,7 @@ fun ProductDetailScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface,
                     navigationIconContentColor = MaterialTheme.colorScheme.onSurface,

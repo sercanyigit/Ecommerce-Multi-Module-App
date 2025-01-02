@@ -9,8 +9,24 @@ import kotlinx.coroutines.flow.update
 import java.util.*
 import javax.inject.Inject
 
+data class NotificationModel(
+    val id: Int,
+    val title: String,
+    val message: String,
+    val type: NotificationType,
+    val timestamp: Date,
+    val isRead: Boolean = false
+)
+
+enum class NotificationType {
+    ORDER,      // Sipariş bildirimleri
+    PRODUCT,    // Ürün bildirimleri
+    DISCOUNT,   // İndirim bildirimleri
+    SYSTEM      // Sistem bildirimleri
+}
+
 data class NotificationsUiState(
-    val notifications: List<Notification> = emptyList()
+    val notifications: List<NotificationModel> = emptyList()
 )
 
 @HiltViewModel
@@ -22,7 +38,7 @@ class NotificationsViewModel @Inject constructor() : ViewModel() {
     init {
         // Örnek bildirimler
         val sampleNotifications = listOf(
-            Notification(
+            NotificationModel(
                 id = 1,
                 title = "Siparişiniz Yolda!",
                 message = "123456 numaralı siparişiniz kargoya verildi. Tahmini teslimat süresi 2 gün.",
@@ -30,7 +46,7 @@ class NotificationsViewModel @Inject constructor() : ViewModel() {
                 timestamp = Date(),
                 isRead = false
             ),
-            Notification(
+            NotificationModel(
                 id = 2,
                 title = "Özel İndirim Fırsatı",
                 message = "Seçili ürünlerde %50'ye varan indirimler sizi bekliyor! Fırsatları kaçırmayın.",
@@ -38,7 +54,7 @@ class NotificationsViewModel @Inject constructor() : ViewModel() {
                 timestamp = Date(System.currentTimeMillis() - 3600000), // 1 saat önce
                 isRead = true
             ),
-            Notification(
+            NotificationModel(
                 id = 3,
                 title = "Yeni Ürünler Eklendi",
                 message = "Sonbahar koleksiyonumuz mağazamızda yerini aldı. Yeni ürünleri keşfedin!",
@@ -46,7 +62,7 @@ class NotificationsViewModel @Inject constructor() : ViewModel() {
                 timestamp = Date(System.currentTimeMillis() - 7200000), // 2 saat önce
                 isRead = false
             ),
-            Notification(
+            NotificationModel(
                 id = 4,
                 title = "Sistem Bakımı",
                 message = "Yarın 03:00-05:00 saatleri arasında sistem bakımı yapılacaktır.",

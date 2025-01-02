@@ -31,14 +31,15 @@ fun ProfileScreen() {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { 
+            CenterAlignedTopAppBar(
+                title = {
                     Text(
-                        text = "Profil",
-                        style = MaterialTheme.typography.titleLarge
-                    ) 
+                        text = "Profilim",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
@@ -51,7 +52,6 @@ fun ProfileScreen() {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
-                .padding(top = 8.dp)
         ) {
             // Profil Başlığı
             Card(
