@@ -106,7 +106,7 @@ fun HomeScreen(
             TopAppBar(
                 title = {
                     AsyncImage(
-                        model = R.drawable.nike_logo,
+                        model = R.drawable.ic_launcher_foreground,
                         contentDescription = "Nike Logo",
                         modifier = Modifier.height(24.dp)
                     )
@@ -177,36 +177,42 @@ fun HomeScreen(
                             .height(160.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = Color(0xFFF5F5F5)
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                         )
                     ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(16.dp)
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text(
                                     text = banners[page].title,
-                                    style = MaterialTheme.typography.displaySmall,
-                                    fontWeight = FontWeight.Bold
+                                    style = MaterialTheme.typography.headlineMedium,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
                                 Text(
                                     text = banners[page].description,
-                                    style = MaterialTheme.typography.titleMedium
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
                                 Text(
                                     text = banners[page].discount,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Button(
                                     onClick = { },
                                     shape = RoundedCornerShape(8.dp),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color.Black
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary
                                     )
                                 ) {
                                     Text(
@@ -244,9 +250,9 @@ fun HomeScreen(
                                     .clip(CircleShape)
                                     .background(
                                         if (pagerState.currentPage == iteration) 
-                                            Color.Black 
+                                            MaterialTheme.colorScheme.primary
                                         else 
-                                            Color.LightGray.copy(alpha = 0.5f)
+                                            MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.3f)
                                     )
                                     .animateContentSize(
                                         animationSpec = spring(
