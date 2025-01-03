@@ -3,10 +3,10 @@ package com.sercan.ecommerce.productdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sercan.ecommerce.database.dao.CartDao
 import com.sercan.ecommerce.database.dao.ProductDao
+import com.sercan.ecommerce.database.entity.CartItemEntity
 import com.sercan.ecommerce.model.Product
-import com.sercan.ecommerce.productdetail.domain.model.CartItem
-import com.sercan.ecommerce.productdetail.domain.repository.CartRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ data class ProductDetailUiState(
 class ProductDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val productDao: ProductDao,
-    private val cartRepository: CartRepository
+    private val cartDao: CartDao
 ) : ViewModel() {
 
     private val productId: Int = checkNotNull(savedStateHandle["productId"])
@@ -60,7 +60,7 @@ class ProductDetailViewModel @Inject constructor(
 
         // Cart item count'u dinle
         viewModelScope.launch {
-            cartRepository.getCartItemCount().collect { count ->
+            cartDao.getCartItemCount().collect { count ->
                 _uiState.update { it.copy(cartItemCount = count) }
             }
         }
@@ -75,8 +75,8 @@ class ProductDetailViewModel @Inject constructor(
         viewModelScope.launch {
             uiState.value.product?.let { product ->
                 try {
-                    cartRepository.addToCart(
-                        CartItem(
+                    cartDao.insertCartItem(
+                        CartItemEntity(
                             id = 0,
                             productId = product.id,
                             name = product.name,
