@@ -9,7 +9,8 @@ sealed class NavigationItem(
     val route: String,
     val title: String,
     val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector
+    val unselectedIcon: ImageVector,
+    val badge: Int = 0
 ) {
     object Home : NavigationItem(
         route = "home",
@@ -17,6 +18,18 @@ sealed class NavigationItem(
         selectedIcon = Icons.Filled.Storefront,
         unselectedIcon = Icons.Outlined.Storefront
     )
+
+    data class Cart(val itemCount: Int = 0) : NavigationItem(
+        route = Cart.ROUTE,
+        title = "Sepetim",
+        selectedIcon = Icons.Filled.ShoppingBag,
+        unselectedIcon = Icons.Outlined.ShoppingBag,
+        badge = itemCount
+    ) {
+        companion object {
+            const val ROUTE = "cart"
+        }
+    }
 
     object Favorites : NavigationItem(
         route = "favorites",
@@ -37,12 +50,5 @@ sealed class NavigationItem(
         title = "Profil",
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person
-    )
-
-    object Cart : NavigationItem(
-        route = "cart",
-        title = "Sepetim",
-        selectedIcon = Icons.Filled.ShoppingBag,
-        unselectedIcon = Icons.Outlined.ShoppingBag
     )
 } 
