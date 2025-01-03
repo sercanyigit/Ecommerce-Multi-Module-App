@@ -107,6 +107,22 @@ fun HomeScreen(
         }
     }
 
+    // Animasyon için visible state
+    var isVisible by remember { mutableStateOf(false) }
+    
+    // Ekran açıldığında animasyonu başlat
+    LaunchedEffect(Unit) {
+        delay(150)
+        isVisible = true
+    }
+
+    // Kategori değişiminde animasyonu tetikle
+    LaunchedEffect(uiState.selectedCategory) {
+        isVisible = false
+        delay(150) // Kısa bir gecikme
+        isVisible = true
+    }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
@@ -254,25 +270,58 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Products
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(
-                    items = uiState.filteredProducts,
-                    key = { it.id }
-                ) { product ->
-                    ProductCard(
-                        product = product,
-                        onProductClick = { onProductClick(product.id) },
-                        onFavoriteClick = { viewModel.toggleFavorite(product) },
-                        onAddToCartClick = { viewModel.addToCart(product) },
-                        modifier = Modifier.animateItemPlacement()
+            // Products with animation
+            AnimatedVisibility(
+                visible = isVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { it / 10 }, // Daha az yükseklik
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = FastOutSlowInEasing
                     )
+                ) + fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = FastOutSlowInEasing
+                    )
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { it / 10 },
+                    animationSpec = tween(
+                        durationMillis = 200,
+                        easing = FastOutSlowInEasing
+                    )
+                ) + fadeOut(
+                    animationSpec = tween(
+                        durationMillis = 200,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+            ) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(
+                        items = uiState.filteredProducts,
+                        key = { it.id }
+                    ) { product ->
+                        ProductCard(
+                            product = product,
+                            onProductClick = { onProductClick(product.id) },
+                            onFavoriteClick = { viewModel.toggleFavorite(product) },
+                            onAddToCartClick = { viewModel.addToCart(product) },
+                            modifier = Modifier.animateItemPlacement(
+                                animationSpec = tween(
+                                    durationMillis = 300,
+                                    easing = FastOutSlowInEasing
+                                )
+                            )
+                        )
+                    }
                 }
             }
         }
