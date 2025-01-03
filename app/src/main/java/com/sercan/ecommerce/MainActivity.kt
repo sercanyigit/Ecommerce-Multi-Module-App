@@ -37,7 +37,7 @@ import com.sercan.ecommerce.home.HomeScreen
 import com.sercan.ecommerce.notifications.NotificationsScreen
 import com.sercan.ecommerce.productdetail.ProductDetailScreen
 import com.sercan.ecommerce.profile.ProfileScreen
-import com.sercan.ecommerce.ui.navigation.NavigationItem
+import com.sercan.ecommerce.common.navigation.NavigationItem
 import com.sercan.ecommerce.ui.theme.EcommerceTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

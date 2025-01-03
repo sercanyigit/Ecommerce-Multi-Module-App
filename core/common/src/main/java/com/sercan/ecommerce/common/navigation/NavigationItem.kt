@@ -1,4 +1,4 @@
-package com.sercan.ecommerce.ui.navigation
+package com.sercan.ecommerce.common.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -20,7 +20,7 @@ sealed class NavigationItem(
     )
 
     data class Cart(val itemCount: Int = 0) : NavigationItem(
-        route = Cart.ROUTE,
+        route = ROUTE,
         title = "Sepetim",
         selectedIcon = Icons.Filled.ShoppingBag,
         unselectedIcon = Icons.Outlined.ShoppingBag,
