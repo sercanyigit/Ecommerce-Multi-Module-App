@@ -1,6 +1,5 @@
 package com.sercan.ecommerce.home
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.CubicBezierEasing
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,11 +26,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -42,7 +38,17 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.outlined.Face
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Person2
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material.icons.outlined.ShoppingBag
+import androidx.compose.material.icons.outlined.SportsBasketball
+import androidx.compose.material.icons.outlined.Watch
+import androidx.compose.material.icons.outlined.Work
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -54,7 +60,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -71,8 +76,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -94,7 +101,7 @@ data class Category(
     val id: Int,
     val name: String,
     val description: String,
-    val imageUrl: String,
+    val icon: ImageVector,
     val isSelected: Boolean = false
 )
 
@@ -120,70 +127,70 @@ fun HomeScreen(
             1,
             "Tümü",
             "Tüm Ürünler",
-            "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
+            Icons.Outlined.Apps,
             uiState.selectedCategory == "Tümü"
         ),
         Category(
             2,
             "Erkek",
-            "Erkek Giyim & Aksesuar",
-            "https://images.unsplash.com/photo-1490367532201-b9bc1dc483f6",
+            "Erkek Giyim",
+            Icons.Outlined.Person,
             uiState.selectedCategory == "Erkek"
         ),
         Category(
             3,
             "Kadın",
-            "Kadın Giyim & Aksesuar",
-            "https://images.unsplash.com/photo-1469334031218-e382a71b716b",
+            "Kadın Giyim",
+            Icons.Outlined.Person2,
             uiState.selectedCategory == "Kadın"
         ),
         Category(
             4,
             "Ayakkabı",
-            "Spor & Günlük Ayakkabılar",
-            "https://images.unsplash.com/photo-1549298916-b41d501d3772",
+            "Ayakkabılar",
+            Icons.Outlined.ShoppingBag,
             uiState.selectedCategory == "Ayakkabı"
         ),
         Category(
             5,
             "Çanta",
-            "Çanta & Cüzdan",
-            "https://images.unsplash.com/photo-1591561954557-26941169b49e",
+            "Çantalar",
+            Icons.Outlined.Work,
             uiState.selectedCategory == "Çanta"
         ),
         Category(
             6,
             "Aksesuar",
-            "Saat & Takı & Gözlük",
-            "https://images.unsplash.com/photo-1523170335258-f5ed11844a49",
+            "Aksesuarlar",
+            Icons.Outlined.Watch,
             uiState.selectedCategory == "Aksesuar"
         ),
         Category(
             7,
             "Elektronik",
-            "Telefon & Bilgisayar & Tablet",
-            "https://images.unsplash.com/photo-1468495244123-6c6c332eeece",
+            "Elektronik",
+            Icons.Outlined.PhoneAndroid,
             uiState.selectedCategory == "Elektronik"
         ),
         Category(
             8,
+            "Ev",
             "Ev & Yaşam",
-            "Mobilya & Dekorasyon",
-            "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e",
+            Icons.Outlined.Home,
             uiState.selectedCategory == "Ev & Yaşam"
         ),
         Category(
             9,
             "Spor",
-            "Spor Giyim & Ekipman",
-            "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b",
+            "Spor Giyim",
+            Icons.Outlined.SportsBasketball,
             uiState.selectedCategory == "Spor"
         ),
         Category(
             10,
             "Kozmetik",
-            "Parfüm & Makyaj",
-            "https://images.unsplash.com/photo-1596462502278-27bfdc403348",
+            "Kozmetik",
+            Icons.Outlined.Face,
             uiState.selectedCategory == "Kozmetik"
         )
     )
@@ -433,7 +440,7 @@ fun HomeScreen(
 
             val categoryPagerState = rememberPagerState(
                 initialPage = 0,
-                pageCount = { (categories.size + 2) / 3 }
+                pageCount = { (categories.size + 4) / 5 }
             )
 
             // Otomatik geçiş için LaunchedEffect
@@ -458,40 +465,16 @@ fun HomeScreen(
             ) { page ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    val startIndex = page * 3
-                    for (i in startIndex until minOf(startIndex + 3, categories.size)) {
+                    val startIndex = page * 5
+                    for (i in startIndex until minOf(startIndex + 5, categories.size)) {
                         val category = categories[i]
                         Card(
                             onClick = { viewModel.filterProducts(category.name) },
                             modifier = Modifier
-                                .width(110.dp)
-                                .height(140.dp)
-                                .graphicsLayer {
-                                    val pageOffset = (
-                                        (categoryPagerState.currentPage - page) + categoryPagerState
-                                            .currentPageOffsetFraction
-                                    ).absoluteValue
-
-                                    alpha = lerp(
-                                        start = 0.5f,
-                                        stop = 1f,
-                                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                                    )
-
-                                    scaleX = lerp(
-                                        start = 0.8f,
-                                        stop = 1f,
-                                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                                    )
-
-                                    scaleY = lerp(
-                                        start = 0.8f,
-                                        stop = 1f,
-                                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                                    )
-                                },
+                                .width(52.dp)
+                                .height(64.dp),
                             shape = RoundedCornerShape(12.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = if (category.isSelected)
@@ -504,37 +487,30 @@ fun HomeScreen(
                             )
                         ) {
                             Column(
-                                modifier = Modifier.fillMaxSize()
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
                             ) {
-                                AsyncImage(
-                                    model = category.imageUrl,
+                                Icon(
+                                    imageVector = category.icon,
                                     contentDescription = category.name,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(80.dp)
-                                        .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                                    modifier = Modifier.size(20.dp),
+                                    tint = if (category.isSelected)
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurface
                                 )
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                ) {
-                                    Text(
-                                        text = category.name,
-                                        style = MaterialTheme.typography.titleSmall,
-                                        fontWeight = FontWeight.Bold,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                    Text(
-                                        text = category.description,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = category.name,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Medium,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -562,8 +538,6 @@ fun HomeScreen(
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
 
             // Products with animation
             AnimatedVisibility(
@@ -632,9 +606,12 @@ fun HomeScreen(
                     // Mevcut ürün listesi
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        contentPadding = PaddingValues(
+                            horizontal = 12.dp,
+                            vertical = 12.dp
+                        ),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxSize()
                     ) {
                         items(
@@ -646,12 +623,14 @@ fun HomeScreen(
                                 onProductClick = { onProductClick(product.id) },
                                 onFavoriteClick = { viewModel.toggleFavorite(product) },
                                 onAddToCartClick = { viewModel.addToCart(product) },
-                                modifier = Modifier.animateItemPlacement(
-                                    animationSpec = tween(
-                                        durationMillis = 300,
-                                        easing = FastOutSlowInEasing
+                                modifier = Modifier
+                                    .scale(0.85f)
+                                    .animateItemPlacement(
+                                        animationSpec = tween(
+                                            durationMillis = 300,
+                                            easing = FastOutSlowInEasing
+                                        )
                                     )
-                                )
                             )
                         }
                     }
