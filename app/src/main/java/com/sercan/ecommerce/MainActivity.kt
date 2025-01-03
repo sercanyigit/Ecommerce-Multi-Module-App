@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sercan.ecommerce.addtocard.AddToCardScreen
 import com.sercan.ecommerce.database.dao.CartDao
@@ -38,6 +39,7 @@ import com.sercan.ecommerce.notifications.NotificationsScreen
 import com.sercan.ecommerce.productdetail.ProductDetailScreen
 import com.sercan.ecommerce.profile.ProfileScreen
 import com.sercan.ecommerce.common.navigation.NavigationItem
+import com.sercan.ecommerce.common.navigation.DeepLinks
 import com.sercan.ecommerce.ui.theme.EcommerceTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -125,35 +127,65 @@ class MainActivity : ComponentActivity() {
                             startDestination = NavigationItem.Home.route,
                             modifier = Modifier.padding(innerPadding)
                         ) {
-                            composable(NavigationItem.Home.route) {
+                            composable(
+                                route = NavigationItem.Home.route,
+                                deepLinks = listOf(
+                                    navDeepLink { uriPattern = DeepLinks.fromCode(DeepLinks.Home.CODE) }
+                                )
+                            ) {
                                 HomeScreen(
                                     onProductClick = { productId ->
-                                        navController.navigate("product_detail/$productId")
+                                        navController.navigate(DeepLinks.ProductDetail.createRoute(productId))
                                     }
                                 )
                             }
-                            composable(NavigationItem.Cart.ROUTE) {
+                            composable(
+                                route = NavigationItem.Cart.ROUTE,
+                                deepLinks = listOf(
+                                    navDeepLink { uriPattern = DeepLinks.fromCode(DeepLinks.Cart.CODE) }
+                                )
+                            ) {
                                 AddToCardScreen(
                                     onBackClick = { navController.popBackStack() }
                                 )
                             }
-                            composable(NavigationItem.Favorites.route) {
+                            composable(
+                                route = NavigationItem.Favorites.route,
+                                deepLinks = listOf(
+                                    navDeepLink { uriPattern = DeepLinks.fromCode(DeepLinks.Favorites.CODE) }
+                                )
+                            ) {
                                 FavoritesScreen(
                                     onProductClick = { productId ->
-                                        navController.navigate("product_detail/$productId")
+                                        navController.navigate(DeepLinks.ProductDetail.createRoute(productId))
                                     }
                                 )
                             }
-                            composable(NavigationItem.Profile.route) {
+                            composable(
+                                route = NavigationItem.Profile.route,
+                                deepLinks = listOf(
+                                    navDeepLink { uriPattern = DeepLinks.fromCode(DeepLinks.Profile.CODE) }
+                                )
+                            ) {
                                 ProfileScreen()
                             }
-                            composable(NavigationItem.Notifications.route) {
+                            composable(
+                                route = NavigationItem.Notifications.route,
+                                deepLinks = listOf(
+                                    navDeepLink { uriPattern = DeepLinks.fromCode(DeepLinks.Notifications.CODE) }
+                                )
+                            ) {
                                 NotificationsScreen()
                             }
                             composable(
                                 route = "product_detail/{productId}",
                                 arguments = listOf(
                                     navArgument("productId") { type = NavType.IntType }
+                                ),
+                                deepLinks = listOf(
+                                    navDeepLink { 
+                                        uriPattern = DeepLinks.fromCode("product_detail/{productId}")
+                                    }
                                 )
                             ) {
                                 ProductDetailScreen(
