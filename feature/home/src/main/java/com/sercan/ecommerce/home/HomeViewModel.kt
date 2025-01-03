@@ -3,9 +3,12 @@ package com.sercan.ecommerce.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sercan.ecommerce.database.dao.ProductDao
+import com.sercan.ecommerce.database.dao.CartDao
 import com.sercan.ecommerce.database.entity.ProductEntity
+import com.sercan.ecommerce.database.entity.CartItemEntity
 import com.sercan.ecommerce.model.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +23,8 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val productDao: ProductDao
+    private val productDao: ProductDao,
+    private val cartDao: CartDao
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState(isLoading = true))
@@ -206,6 +210,37 @@ class HomeViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             }
+        }
+    }
+
+    fun addToCart(product: Product) {
+        viewModelScope.launch {
+            try {
+                cartDao.insertCartItem(
+                    CartItemEntity(
+                        id = 0,
+                        productId = product.id,
+                        name = product.name,
+                        price = product.price,
+                        imageUrl = product.imageUrl,
+                        quantity = 1,
+                        selectedSize = product.sizes.firstOrNull(),
+                        selectedColor = product.colors.firstOrNull()
+                    )
+                )
+                // Başarılı mesajı
+                _uiState.update { it.copy(error = "${product.name} sepete eklendi") }
+                clearError()
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
+        }
+    }
+
+    private fun clearError() {
+        viewModelScope.launch {
+            delay(2000) // 2 saniye sonra error'u temizle
+            _uiState.update { it.copy(error = null) }
         }
     }
 } 

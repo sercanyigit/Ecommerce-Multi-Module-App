@@ -57,6 +57,13 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            snackbarHostState.showSnackbar(it)
+        }
+    }
 
     val banners = listOf(
         Banner(
@@ -101,15 +108,7 @@ fun HomeScreen(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                modifier = Modifier.height(0.dp)
-            )
-        }
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -271,6 +270,7 @@ fun HomeScreen(
                         product = product,
                         onProductClick = { onProductClick(product.id) },
                         onFavoriteClick = { viewModel.toggleFavorite(product) },
+                        onAddToCartClick = { viewModel.addToCart(product) },
                         modifier = Modifier.animateItemPlacement()
                     )
                 }

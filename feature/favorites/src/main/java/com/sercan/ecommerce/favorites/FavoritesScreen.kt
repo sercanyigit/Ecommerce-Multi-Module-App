@@ -1,5 +1,6 @@
 package com.sercan.ecommerce.favorites
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,14 +25,26 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sercan.ecommerce.ui.components.ProductCard
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel(),
     onProductClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            snackbarHostState.showSnackbar(it)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -48,7 +61,8 @@ fun FavoritesScreen(
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 )
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         if (uiState.favoriteProducts.isEmpty()) {
             Box(
@@ -77,8 +91,10 @@ fun FavoritesScreen(
                 items(uiState.favoriteProducts) { product ->
                     ProductCard(
                         product = product,
-                        onProductClick = { onProductClick(it.id) },
-                        onFavoriteClick = { viewModel.removeFromFavorites(it) }
+                        onProductClick = { onProductClick(product.id) },
+                        onFavoriteClick = { viewModel.removeFromFavorites(product) },
+                        onAddToCartClick = { viewModel.addToCart(product) },
+                        modifier = Modifier.animateItemPlacement()
                     )
                 }
             }
