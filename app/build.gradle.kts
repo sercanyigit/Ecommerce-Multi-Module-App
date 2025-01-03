@@ -63,6 +63,7 @@ dependencies {
     implementation(project(":feature:profile"))
     implementation(project(":feature:productdetail"))
     implementation(project(":feature:addtocard"))
+    implementation(project(":feature:onboarding"))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime)

@@ -18,8 +18,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
@@ -40,6 +40,7 @@ import com.sercan.ecommerce.productdetail.ProductDetailScreen
 import com.sercan.ecommerce.profile.ProfileScreen
 import com.sercan.ecommerce.common.navigation.NavigationItem
 import com.sercan.ecommerce.common.navigation.DeepLinks
+import com.sercan.ecommerce.onboarding.OnboardingScreen
 import com.sercan.ecommerce.ui.theme.EcommerceTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -124,9 +125,18 @@ class MainActivity : ComponentActivity() {
                     ) { innerPadding ->
                         NavHost(
                             navController = navController,
-                            startDestination = NavigationItem.Home.route,
+                            startDestination = "onboarding",
                             modifier = Modifier.padding(innerPadding)
                         ) {
+                            composable(route = "onboarding") {
+                                OnboardingScreen(
+                                    onOnboardingComplete = {
+                                        navController.navigate(NavigationItem.Home.route) {
+                                            popUpTo("onboarding") { inclusive = true }
+                                        }
+                                    }
+                                )
+                            }
                             composable(
                                 route = NavigationItem.Home.route,
                                 deepLinks = listOf(
