@@ -69,6 +69,12 @@ class AddToCardViewModel @Inject constructor(
             )
         }
     }
+
+    fun clearCart() {
+        viewModelScope.launch {
+            cartDao.clearCart()
+        }
+    }
 }
 
 data class CartUiState(

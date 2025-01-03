@@ -38,4 +38,11 @@ sealed class NavigationItem(
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person
     )
+
+    object Cart : NavigationItem(
+        route = "cart",
+        title = "Sepetim",
+        selectedIcon = Icons.Filled.ShoppingBag,
+        unselectedIcon = Icons.Outlined.ShoppingBag
+    )
 } 

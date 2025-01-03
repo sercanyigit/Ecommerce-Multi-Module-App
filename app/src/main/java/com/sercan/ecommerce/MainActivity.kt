@@ -73,6 +73,7 @@ fun MainScreen() {
     val items = listOf(
         NavigationItem.Home,
         NavigationItem.Favorites,
+        NavigationItem.Cart,
         NavigationItem.Notifications,
         NavigationItem.Profile
     )
@@ -174,6 +175,28 @@ fun MainScreen() {
             }
 
             composable(
+                route = NavigationItem.Cart.route,
+                enterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                },
+                popEnterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                popExitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }
+            ) {
+                AddToCardScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
                 route = "product_detail/{productId}",
                 arguments = listOf(
                     navArgument("productId") { type = NavType.IntType }
@@ -196,29 +219,7 @@ fun MainScreen() {
                         navController.popBackStack()
                     },
                     onCartClick = {
-                        navController.navigate("add_to_card")
-                    }
-                )
-            }
-
-            composable(
-                route = "add_to_card",
-                enterTransition = {
-                    fadeIn(animationSpec = tween(300))
-                },
-                exitTransition = {
-                    fadeOut(animationSpec = tween(300))
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(300))
-                },
-                popExitTransition = {
-                    fadeOut(animationSpec = tween(300))
-                }
-            ) {
-                AddToCardScreen(
-                    onBackClick = {
-                        navController.popBackStack()
+                        navController.navigate("cart")
                     }
                 )
             }
