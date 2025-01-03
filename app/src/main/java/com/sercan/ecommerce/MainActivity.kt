@@ -88,37 +88,39 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Scaffold(
                         bottomBar = {
-                            NavigationBar {
-                                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                val currentRoute = navBackStackEntry?.destination?.route
-
-                                navigationItems.forEach { item ->
-                                    NavigationBarItem(
-                                        icon = {
-                                            BadgedBox(
-                                                badge = {
-                                                    if (item is NavigationItem.Cart && item.badge > 0) {
-                                                        Badge { Text(item.badge.toString()) }
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentRoute = navBackStackEntry?.destination?.route
+                            
+                            if (currentRoute != "onboarding") {
+                                NavigationBar {
+                                    navigationItems.forEach { item ->
+                                        NavigationBarItem(
+                                            icon = {
+                                                BadgedBox(
+                                                    badge = {
+                                                        if (item is NavigationItem.Cart && item.badge > 0) {
+                                                            Badge { Text(item.badge.toString()) }
+                                                        }
                                                     }
+                                                ) {
+                                                    Icon(
+                                                        imageVector = if (currentRoute == item.route) {
+                                                            item.selectedIcon
+                                                        } else item.unselectedIcon,
+                                                        contentDescription = item.title
+                                                    )
                                                 }
-                                            ) {
-                                                Icon(
-                                                    imageVector = if (currentRoute == item.route) {
-                                                        item.selectedIcon
-                                                    } else item.unselectedIcon,
-                                                    contentDescription = item.title
-                                                )
+                                            },
+                                            label = { Text(item.title) },
+                                            selected = currentRoute == item.route,
+                                            onClick = {
+                                                navController.navigate(item.route) {
+                                                    popUpTo(navController.graph.startDestinationId)
+                                                    launchSingleTop = true
+                                                }
                                             }
-                                        },
-                                        label = { Text(item.title) },
-                                        selected = currentRoute == item.route,
-                                        onClick = {
-                                            navController.navigate(item.route) {
-                                                popUpTo(navController.graph.startDestinationId)
-                                                launchSingleTop = true
-                                            }
-                                        }
-                                    )
+                                        )
+                                    }
                                 }
                             }
                         }
