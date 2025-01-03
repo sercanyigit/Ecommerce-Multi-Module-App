@@ -15,18 +15,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.sercan.ecommerce.ui.theme.ThemeDataStore
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
-    val context = LocalContext.current
-    val themeDataStore = remember { ThemeDataStore(context) }
-    val isDarkMode by themeDataStore.isDarkMode.collectAsState(initial = false)
+fun ProfileScreen(
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
+    val isDarkMode by viewModel.isDarkMode.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
 
     Scaffold(
@@ -201,7 +200,7 @@ fun ProfileScreen() {
                             checked = isDarkMode,
                             onCheckedChange = { isChecked ->
                                 scope.launch {
-                                    themeDataStore.setDarkMode(isChecked)
+                                    viewModel.setDarkMode(isChecked)
                                 }
                             }
                         )
@@ -250,7 +249,7 @@ private fun ProfileMenuItem(
         Icon(
             imageVector = Icons.Default.ChevronRight,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         )
     }
 }

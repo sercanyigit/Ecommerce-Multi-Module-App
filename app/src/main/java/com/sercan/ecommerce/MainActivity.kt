@@ -42,6 +42,7 @@ import com.sercan.ecommerce.common.navigation.NavigationItem
 import com.sercan.ecommerce.common.navigation.DeepLinks
 import com.sercan.ecommerce.onboarding.OnboardingScreen
 import com.sercan.ecommerce.ui.theme.EcommerceTheme
+import com.sercan.ecommerce.ui.theme.ThemeManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,6 +50,9 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var cartDao: CartDao
+
+    @Inject
+    lateinit var themeManager: ThemeManager
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +62,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            EcommerceTheme {
+            EcommerceTheme(themeManager = themeManager) {
                 val systemUiController = rememberSystemUiController()
                 val darkTheme = isSystemInDarkTheme()
-                val surfaceColor = MaterialTheme.colorScheme.surface
-                
+
                 SideEffect {
                     systemUiController.setSystemBarsColor(
                         color = Color.Transparent,

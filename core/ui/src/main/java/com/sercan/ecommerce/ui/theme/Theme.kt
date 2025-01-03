@@ -11,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -60,11 +59,10 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun EcommerceTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    themeManager: ThemeManager,
     content: @Composable () -> Unit
 ) {
-    val context = LocalContext.current
-    val themeDataStore = ThemeDataStore(context)
-    val isDarkMode by themeDataStore.isDarkMode.collectAsState(initial = darkTheme)
+    val isDarkMode by themeManager.isDarkMode.collectAsState(initial = darkTheme)
     
     val colorScheme = when {
         isDarkMode -> DarkColorScheme
