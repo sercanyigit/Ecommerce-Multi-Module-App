@@ -7,7 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.HorizontalRule
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,6 +29,7 @@ import coil.compose.AsyncImage
 @Composable
 fun ProductDetailScreen(
     onBackClick: () -> Unit,
+    onCartClick: () -> Unit = {},
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -99,11 +104,13 @@ fun ProductDetailScreen(
                             .padding(end = 15.dp)
                             .size(28.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.ShoppingBag,
-                            contentDescription = "Sepet",
-                            modifier = Modifier.size(28.dp)
-                        )
+                        IconButton(onClick = onCartClick) {
+                            Icon(
+                                imageVector = Icons.Filled.ShoppingBag,
+                                contentDescription = "Sepet",
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

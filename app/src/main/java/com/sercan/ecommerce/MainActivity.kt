@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.sercan.ecommerce.addtocard.AddToCardScreen
 import com.sercan.ecommerce.favorites.FavoritesScreen
 import com.sercan.ecommerce.home.HomeScreen
 import com.sercan.ecommerce.notifications.NotificationsScreen
@@ -79,7 +80,7 @@ fun MainScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = currentRoute in items.map { it.route }
-    
+
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
@@ -191,6 +192,31 @@ fun MainScreen() {
                 }
             ) {
                 ProductDetailScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onCartClick = {
+                        navController.navigate("add_to_card")
+                    }
+                )
+            }
+
+            composable(
+                route = "add_to_card",
+                enterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                },
+                popEnterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                popExitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }
+            ) {
+                AddToCardScreen(
                     onBackClick = {
                         navController.popBackStack()
                     }
