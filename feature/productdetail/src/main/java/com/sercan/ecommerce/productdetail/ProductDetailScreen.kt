@@ -1,5 +1,6 @@
 package com.sercan.ecommerce.productdetail
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,11 +27,19 @@ fun ProductDetailScreen(
     onBackClick: () -> Unit,
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val product = uiState.product
     var selectedSize by remember { mutableStateOf<String?>(null) }
     var selectedColor by remember { mutableStateOf<String?>(null) }
     var quantity by remember { mutableStateOf(1) }
+
+    // Error state'ini observe et
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     fun formatPrice(price: Double): String {
         return String.format("%.2f₺", price)
@@ -71,21 +81,28 @@ fun ProductDetailScreen(
                         badge = {
                             if (uiState.cartItemCount > 0) {
                                 Badge(
-                                    modifier = Modifier.offset(x = (-3).dp, y = 3.dp)
+                                    modifier = Modifier
+                                        .size(if (uiState.cartItemCount > 9) 28.dp else 24.dp)
+                                        .offset(x = if (uiState.cartItemCount > 9) (-8).dp else (-6).dp, y = 6.dp),
+                                    containerColor = MaterialTheme.colorScheme.error
                                 ) {
                                     Text(
-                                        text = uiState.cartItemCount.toString(),
+                                        text = if (uiState.cartItemCount > 99) "+99" else uiState.cartItemCount.toString(),
                                         style = MaterialTheme.typography.labelSmall,
-                                        modifier = Modifier.padding(horizontal = 4.dp)
+                                        fontWeight = FontWeight.ExtraBold,
+                                        modifier = Modifier.padding(horizontal = if (uiState.cartItemCount > 9) 3.dp else 1.dp)
                                     )
                                 }
                             }
                         },
-                        modifier = Modifier.offset(x = (-5).dp)
+                        modifier = Modifier
+                            .padding(end = 15.dp)
+                            .size(28.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ShoppingCart,
-                            contentDescription = "Sepet"
+                            imageVector = Icons.Filled.ShoppingBag,
+                            contentDescription = "Sepet",
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                 },
@@ -145,7 +162,7 @@ fun ProductDetailScreen(
                                     enabled = quantity > 1
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Remove,
+                                        imageVector = Icons.Filled.HorizontalRule,
                                         contentDescription = "Azalt",
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -160,7 +177,7 @@ fun ProductDetailScreen(
                                     onClick = { quantity++ }
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Add,
+                                        imageVector = Icons.Filled.Add,
                                         contentDescription = "Artır",
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -170,7 +187,12 @@ fun ProductDetailScreen(
                     }
 
                     Button(
-                        onClick = { viewModel.addToCart() },
+                        onClick = { 
+                            viewModel.selectedSize = selectedSize
+                            viewModel.selectedColor = selectedColor
+                            viewModel.quantity = quantity
+                            viewModel.addToCart() 
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
@@ -180,11 +202,22 @@ fun ProductDetailScreen(
                             contentColor = MaterialTheme.colorScheme.onPrimary
                         )
                     ) {
-                        Text(
-                            text = "Sepete Ekle",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ShoppingBag,
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Sepete Ekle",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

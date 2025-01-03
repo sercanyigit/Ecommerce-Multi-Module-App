@@ -1,38 +1,41 @@
 package com.sercan.ecommerce.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class NavigationItem(
     val route: String,
     val title: String,
-    val icon: ImageVector
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
 ) {
-    data object Home : NavigationItem(
+    object Home : NavigationItem(
         route = "home",
-        title = "Ana Sayfa",
-        icon = Icons.Default.Home
+        title = "Anasayfa",
+        selectedIcon = Icons.Filled.Storefront,
+        unselectedIcon = Icons.Outlined.Storefront
     )
-    
-    data object Favorites : NavigationItem(
+
+    object Favorites : NavigationItem(
         route = "favorites",
         title = "Favoriler",
-        icon = Icons.Default.Favorite
+        selectedIcon = Icons.Filled.Favorite,
+        unselectedIcon = Icons.Outlined.FavoriteBorder
     )
-    
-    data object Notifications : NavigationItem(
+
+    object Notifications : NavigationItem(
         route = "notifications",
         title = "Bildirimler",
-        icon = Icons.Default.Notifications
+        selectedIcon = Icons.Filled.Notifications,
+        unselectedIcon = Icons.Outlined.Notifications
     )
-    
-    data object Profile : NavigationItem(
+
+    object Profile : NavigationItem(
         route = "profile",
         title = "Profil",
-        icon = Icons.Default.Person
+        selectedIcon = Icons.Filled.Person,
+        unselectedIcon = Icons.Outlined.Person
     )
 } 

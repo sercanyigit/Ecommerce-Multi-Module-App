@@ -14,9 +14,6 @@ import javax.inject.Inject
 
 data class ProductDetailUiState(
     val product: Product? = null,
-    val selectedQuantity: Int = 1,
-    val selectedSize: String? = null,
-    val selectedColor: String? = null,
     val cartItemCount: Int = 0,
     val isLoading: Boolean = false,
     val error: String? = null
@@ -32,6 +29,10 @@ class ProductDetailViewModel @Inject constructor(
     private val productId: Int = checkNotNull(savedStateHandle["productId"])
     private val _uiState = MutableStateFlow(ProductDetailUiState(isLoading = true))
     val uiState: StateFlow<ProductDetailUiState> = _uiState.asStateFlow()
+
+    var selectedSize: String? = null
+    var selectedColor: String? = null
+    var quantity: Int = 1
 
     init {
         viewModelScope.launch {
@@ -65,43 +66,41 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun onQuantityChange(quantity: Int) {
-        _uiState.update { it.copy(selectedQuantity = quantity) }
-    }
-
-    fun onSizeSelect(size: String) {
-        _uiState.update { it.copy(selectedSize = size) }
-    }
-
-    fun onColorSelect(color: String) {
-        _uiState.update { it.copy(selectedColor = color) }
-    }
-
     fun addToCart() {
-        val currentState = _uiState.value
-        val product = currentState.product ?: return
-
-        if (currentState.selectedSize == null || currentState.selectedColor == null) {
+        if (selectedSize == null || selectedColor == null) {
             _uiState.update { it.copy(error = "Lütfen beden ve renk seçiniz") }
             return
         }
 
         viewModelScope.launch {
-            try {
-                val cartItem = CartItem(
-                    id = 0, // Room otomatik id atayacak
-                    productId = product.id,
-                    name = product.name,
-                    price = product.price,
-                    imageUrl = product.imageUrl,
-                    quantity = currentState.selectedQuantity,
-                    selectedSize = currentState.selectedSize,
-                    selectedColor = currentState.selectedColor
-                )
-                cartRepository.addToCart(cartItem)
-            } catch (e: Exception) {
-                _uiState.update { it.copy(error = e.message) }
+            uiState.value.product?.let { product ->
+                try {
+                    cartRepository.addToCart(
+                        CartItem(
+                            id = 0,
+                            productId = product.id,
+                            name = product.name,
+                            price = product.price,
+                            imageUrl = product.imageUrl,
+                            quantity = quantity,
+                            selectedSize = selectedSize!!,
+                            selectedColor = selectedColor!!
+                        )
+                    )
+                    // Başarılı mesajı
+                    _uiState.update { it.copy(error = "Ürün sepete eklendi") }
+                    clearError()
+                } catch (e: Exception) {
+                    _uiState.update { it.copy(error = e.message) }
+                }
             }
+        }
+    }
+
+    private fun clearError() {
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(2000) // 2 saniye sonra error'u temizle
+            _uiState.update { it.copy(error = null) }
         }
     }
 
